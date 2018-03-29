@@ -1,4 +1,4 @@
-index = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+indexs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 def drawBoard(board):
  print('  a  b  c  d  e  f  g  h  \n')
  for i in range(8):
@@ -38,13 +38,49 @@ def validChoices(choices, board, player):
  bchoices = playerChoices(board, 'B')
  wchoices = playerChoices(board, 'W')
  vchoices = []
- for b in bchoices:
+ if player == 'B':
+  for b in bchoices:
    for w in wchoices:
+    if b[1] == w[1]:
+     if w[0]>b[0]:
+      m = w[0]-b[0]
+      vchoices.append([w[0] + m,w[1] + m])
+     else:
+      m = b[0] - w[0]
+      vchoices.append([w[0] - m,w[1] + m])
     if b[0] == w[0]:
-      if player == 'B':
-       m = w[0] + 1
-      print(m)
+     if w[1]>b[1]:
+      m = w[1] - b[1]
+      vchoices.append([w[0], w[1] + 1])
+     else:
+      m = b[1] - w[1]
+      vchoices.append([w[0], w[1]])
+
+ if player == 'W':
+  for w in wchoices:
+   for b in bchoices:
+    if b[1] == w[1]:
+     if b[0]>w[0]:
+      vchoices.append([b[0] + 1,b[1] + 1])
+     else:
+      vchoices.append([b[0] - 1,b[1] + 1])
+    if b[0] == w[0]:
+     if w[1]>b[1]:
+      vchoices.append([b[0], b[1] + 4])
+     else:
+      vchoices.append([b[0], b[1]])
+ return vchoices
+
+def convertValid(listValid):
+ list = []
+ for l in listValid:
+  list.append([indexs[l[0]], l[1]])
+ return list
+
 mainBoard = getNewBoard()
 resetBoard(mainBoard)
 drawBoard(mainBoard)
-validChoices(listChoices(mainBoard), mainBoard, 'B')
+listValidB = validChoices(listChoices(mainBoard), mainBoard, 'B')
+listValidW = validChoices(listChoices(mainBoard), mainBoard, 'W')
+print(convertValid(listValidB))
+print(convertValid(listValidW))
